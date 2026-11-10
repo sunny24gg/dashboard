@@ -26,7 +26,7 @@ export default function TodosSection({
 
   // New Todo State
   const [newTitle, setNewTitle] = useState('');
-  const [newCategory, setNewCategory] = useState('Work');
+  const [newCategory, setNewCategory] = useState('Video Editing');
   const [newPriority, setNewPriority] = useState('medium');
   const [newDueDate, setNewDueDate] = useState('');
   const [newRelatedWorkId, setNewRelatedWorkId] = useState('');
@@ -136,7 +136,7 @@ export default function TodosSection({
           <input
             type="text"
             required
-            placeholder="What needs to get done next? (e.g. Deploy Sunny portfolio v2, send invoice...)"
+            placeholder="What needs to get done next? (e.g. Export 4K master, send preview cut, color grade scene 3...)"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             className="w-full md:flex-1 bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-indigo-500"
@@ -159,12 +159,13 @@ export default function TodosSection({
               onChange={(e) => setNewCategory(e.target.value)}
               className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
             >
-              <option value="Work">Work</option>
-              <option value="Billing">Billing & Pay</option>
-              <option value="Client Call">Client Call</option>
-              <option value="Deployment">Deployment</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Review">Review</option>
+              <option value="Video Editing">🎬 Video Editing</option>
+              <option value="Filmmaking">🎥 Filmmaking</option>
+              <option value="Color Grading">🎨 Color Grading</option>
+              <option value="Client Review">👁️ Client Review</option>
+              <option value="Billing">💰 Billing & Pay</option>
+              <option value="Export & Delivery">📦 Export & Delivery</option>
+              <option value="General">📝 General</option>
             </select>
 
             <input
@@ -241,11 +242,13 @@ export default function TodosSection({
             className="bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1 text-xs text-slate-200 focus:outline-none"
           >
             <option value="all">All Categories</option>
-            <option value="Work">Work</option>
+            <option value="Video Editing">Video Editing</option>
+            <option value="Filmmaking">Filmmaking</option>
+            <option value="Color Grading">Color Grading</option>
+            <option value="Client Review">Client Review</option>
             <option value="Billing">Billing & Pay</option>
-            <option value="Client Call">Client Call</option>
-            <option value="Deployment">Deployment</option>
-            <option value="Marketing">Marketing</option>
+            <option value="Export & Delivery">Export & Delivery</option>
+            <option value="General">General</option>
           </select>
         </div>
       </div>

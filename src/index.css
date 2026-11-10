@@ -12,6 +12,13 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
+}
+
+/* Smooth tap highlight removal on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
 ::selection {
@@ -21,8 +28,8 @@ body {
 
 /* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: rgba(15, 23, 42, 0.6);
@@ -34,3 +41,10 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(148, 163, 184, 0.6);
 }
+
+/* Mobile drawer slide-in animation */
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+

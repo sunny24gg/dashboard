@@ -15,13 +15,13 @@ import {
 
 // User's provided Firebase configuration
 export const firebaseConfig = {
-  apiKey: "AIzaSyDPZXcq6SaqeBwSQkhLfU7Sq1a5UxlEoZo",
-  authDomain: "sunnyportfilo.firebaseapp.com",
-  projectId: "sunnyportfilo",
-  storageBucket: "sunnyportfilo.firebasestorage.app",
-  messagingSenderId: "298074832477",
-  appId: "1:298074832477:web:58d1920cdbb71c23e4d7b4",
-  measurementId: "G-RYSZ7XKQBH"
+  apiKey: "AIzaSyCp55D8KuEQms3cHAJdCQSiT4X49UWsQeM",
+  authDomain: "portfilo-3e0b6.firebaseapp.com",
+  projectId: "portfilo-3e0b6",
+  storageBucket: "portfilo-3e0b6.firebasestorage.app",
+  messagingSenderId: "256224029357",
+  appId: "1:256224029357:web:2bdc9d36355a2d7e3d7424",
+  measurementId: "G-LDMH15BDHD"
 };
 
 // Initialize Firebase
@@ -41,12 +41,13 @@ export { analytics };
 // Initialize Firestore
 export const db = getFirestore(app);
 
-// Firestore Collections matching sunnyportfilo database
+// Firestore Collections matching portfilo-3e0b6 database
 export const projectsCol = collection(db, "projects");
 export const newProjectsCol = collection(db, "new_projects"); // Incoming requests from portfolio
 export const worksCol = collection(db, "works");
 export const todosCol = collection(db, "todos");
-export const reviewsCol = collection(db, "reviews");
+export const ratingsCol = collection(db, "ratings");
+export const reviewsCol = ratingsCol; // Live ratings collection in portfilo-3e0b6
 export const inquiriesCol = collection(db, "inquiries");
 export const portfolioInfoDoc = doc(db, "portfolio_data", "info");
 
@@ -105,7 +106,7 @@ export const addWork = async (workData) => {
     hoursWorked: Number(workData.hoursWorked) || 0,
     time: workData.time || workData.deadline || "",
     deadline: workData.deadline || workData.time || "",
-    webpageUrl: workData.webpageUrl || "https://sunnyportfilo.firebaseapp.com",
+    webpageUrl: workData.webpageUrl || "https://portfilo-3e0b6.firebaseapp.com",
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp()
   };
@@ -157,26 +158,30 @@ export const deleteTodo = async (id) => {
 
 // --- REVIEWS / RATINGS (From Webpage) ---
 export const addReview = async (reviewData) => {
-  const revId = 'rev_' + Date.now();
-  const docRef = doc(db, "reviews", revId);
+  const docRef = doc(ratingsCol);
   const data = {
-    id: revId,
+    id: docRef.id,
     name: reviewData.name || reviewData.clientName || "Anonymous",
-    text: reviewData.text || reviewData.reviewText || "",
+    feedback: reviewData.feedback || reviewData.text || reviewData.reviewText || "",
+    text: reviewData.text || reviewData.feedback || reviewData.reviewText || "",
     rating: Number(reviewData.rating) || 5,
     category: reviewData.category || "editor",
     role: reviewData.role || "Verified Client",
     company: reviewData.company || "",
     date: reviewData.date || new Date().toISOString().split('T')[0],
+    createdAt: serverTimestamp(),
     updatedAt: serverTimestamp()
   };
   await setDoc(docRef, data);
-  return revId;
+  return docRef.id;
 };
 
 export const deleteReview = async (id) => {
-  return await deleteDoc(doc(db, "reviews", id));
+  return await deleteDoc(doc(db, "ratings", id));
 };
+
+export const addRating = addReview;
+export const deleteRating = deleteReview;
 
 // --- INQUIRIES (Incoming client requests from webpage contact form) ---
 export const deleteInquiry = async (id) => {

@@ -11,7 +11,7 @@ export default function WorkModal({
   const [formData, setFormData] = useState({
     title: '',
     client: '',
-    category: 'Web Development',
+    category: 'Video Editing',
     status: 'in_progress',
     priority: 'medium',
     payAmount: '',
@@ -34,7 +34,7 @@ export default function WorkModal({
       setFormData({
         title: workToEdit.title || '',
         client: workToEdit.client || '',
-        category: workToEdit.category || 'Web Development',
+        category: workToEdit.category || 'Video Editing',
         status: workToEdit.status || 'in_progress',
         priority: workToEdit.priority || 'medium',
         payAmount: workToEdit.payAmount ?? '',
@@ -53,7 +53,7 @@ export default function WorkModal({
       setFormData({
         title: '',
         client: '',
-        category: 'Web Development',
+        category: 'Video Editing',
         status: 'in_progress',
         priority: 'medium',
         payAmount: '',
@@ -163,13 +163,15 @@ export default function WorkModal({
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-blue-500"
                 >
-                  <option value="Web Development">Web Development</option>
-                  <option value="UI/UX & Frontend">UI/UX & Frontend</option>
-                  <option value="Backend & Cloud">Backend & Cloud</option>
-                  <option value="Mobile App">Mobile App</option>
-                  <option value="Full-Stack System">Full-Stack System</option>
-                  <option value="AI & ML Tooling">AI & ML Tooling</option>
-                  <option value="Maintenance & Support">Maintenance & Support</option>
+                  <option value="Video Editing">Video Editing</option>
+                  <option value="Filmmaking & Directing">Filmmaking & Directing</option>
+                  <option value="Commercial & Brand Ads">Commercial & Brand Ads</option>
+                  <option value="Color Grading & DI">Color Grading & DI</option>
+                  <option value="YouTube Long-Form">YouTube Long-Form</option>
+                  <option value="Shorts, Reels & TikTok">Shorts, Reels & TikTok</option>
+                  <option value="Music Video Production">Music Video Production</option>
+                  <option value="Sound Design & Audio Mix">Sound Design & Audio Mix</option>
+                  <option value="VFX & Motion Graphics">VFX & Motion Graphics</option>
                 </select>
               </div>
 
@@ -313,16 +315,16 @@ export default function WorkModal({
           <div className="pt-3 border-t border-slate-800/80">
             <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
               <Link2 className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Webpage URL, Deliverables & Scope</span>
+              <span>Video Link, Deliverables & Production Scope</span>
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Webpage URL / Live Demo
+                  Video URL / Drive / Showcase Link
                 </label>
                 <input
                   type="url"
-                  placeholder="https://sunnyportfilo.firebaseapp.com/project"
+                  placeholder="https://youtube.com/watch?v=... or Vimeo / Google Drive"
                   value={formData.webpageUrl}
                   onChange={(e) => setFormData({ ...formData, webpageUrl: e.target.value })}
                   className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-cyan-500"
@@ -331,11 +333,11 @@ export default function WorkModal({
 
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Key Deliverables
+                  Key Video Deliverables
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. React Frontend, Firebase Auth, Stripe API"
+                  placeholder="e.g. 4K Master Export, 3x 9:16 Reels, Color Grade LUTs, XML"
                   value={formData.deliverables}
                   onChange={(e) => setFormData({ ...formData, deliverables: e.target.value })}
                   className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-cyan-500"
@@ -345,11 +347,11 @@ export default function WorkModal({
 
             <div className="mt-3">
               <label className="block text-xs font-medium text-slate-300 mb-1">
-                Work Scope & Description
+                Edit Notes, Shot List & Brief
               </label>
               <textarea
                 rows={2}
-                placeholder="Comprehensive details on the work, specifications, requirements..."
+                placeholder="Pacing requirements, aspect ratios, audio tracks, style reference links..."
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-blue-500"

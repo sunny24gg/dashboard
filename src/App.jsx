@@ -73,7 +73,7 @@ export default function App() {
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
 
   // ═══════════════════════════════════════════════════════════════
-  // Real-time Firestore Listeners — directly to sunnyportfilo DB
+  // Real-time Firestore Listeners — directly to portfilo-3e0b6 DB
   // ═══════════════════════════════════════════════════════════════
   useEffect(() => {
     setIsLoading(true);
@@ -119,12 +119,16 @@ export default function App() {
       (err) => console.warn('Todos listener:', err.message)
     );
 
-    // 4. Webpage Reviews & Ratings
+    // 4. Webpage Reviews & Ratings from Firebase ratings collection
     const unsubReviews = onSnapshot(
       reviewsCol,
       (snap) => {
         const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        list.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+        list.sort((a, b) => {
+          const ta = a.createdAt?.seconds || (a.date ? new Date(a.date).getTime() / 1000 : 0);
+          const tb = b.createdAt?.seconds || (b.date ? new Date(b.date).getTime() / 1000 : 0);
+          return tb - ta;
+        });
         setReviews(list);
       },
       (err) => console.warn('Reviews listener:', err.message)
@@ -135,7 +139,11 @@ export default function App() {
       inquiriesCol,
       (snap) => {
         const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        list.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+        list.sort((a, b) => {
+          const ta = a.submittedAt?.seconds || (a.date ? new Date(a.date).getTime() / 1000 : 0);
+          const tb = b.submittedAt?.seconds || (b.date ? new Date(b.date).getTime() / 1000 : 0);
+          return tb - ta;
+        });
         setInquiries(list);
       },
       (err) => console.warn('Inquiries listener:', err.message)
@@ -184,7 +192,7 @@ export default function App() {
   };
 
   const handleDeleteProject = async (id) => {
-    if (window.confirm('Delete this project from sunnyportfilo Firestore?')) {
+    if (window.confirm('Delete this project from Firestore?')) {
       await deleteProject(id);
     }
   };
@@ -211,7 +219,7 @@ export default function App() {
   };
 
   const handleDeleteWork = async (id) => {
-    if (window.confirm('Delete this work entry from sunnyportfilo database?')) {
+    if (window.confirm('Delete this work entry from database?')) {
       await deleteWork(id);
     }
   };
@@ -231,10 +239,26 @@ export default function App() {
   };
 
   const handleConvertInquiryToWork = (inquiry) => {
+    const clientName = inquiry.clientName || inquiry.name || 'Client';
+    const message = inquiry.details || inquiry.message || '';
+    const pt = (inquiry.projectType || inquiry.service || '').toLowerCase();
+    let category = 'Video Editing';
+    if (pt.includes('film') || pt.includes('cinema') || pt.includes('directing')) category = 'Filmmaking & Directing';
+    else if (pt.includes('commercial') || pt.includes('ad')) category = 'Commercial & Brand Ads';
+    else if (pt.includes('color') || pt.includes('grading')) category = 'Color Grading & DI';
+    else if (pt.includes('youtube')) category = 'YouTube Long-Form';
+    else if (pt.includes('short') || pt.includes('reel')) category = 'Shorts, Reels & TikTok';
+
     setWorkToEdit({
-      title: inquiry.projectType ? `${inquiry.projectType} for ${inquiry.name}` : `Project for ${inquiry.name}`,
-      client: inquiry.name,
-      description: inquiry.message,
+      title: inquiry.projectType ? `${inquiry.projectType} — ${clientName}` : `Video Project for ${clientName}`,
+      client: clientName,
+      category,
+      description: [
+        message ? `Brief: ${message}` : '',
+        inquiry.timeline ? `Timeline: ${inquiry.timeline}` : '',
+        inquiry.phone && inquiry.phone !== 'Not provided' ? `Phone: ${inquiry.phone}` : '',
+        inquiry.email ? `Email: ${inquiry.email}` : ''
+      ].filter(Boolean).join('\n'),
       payAmount: inquiry.budget ? parseFloat(String(inquiry.budget).replace(/[^0-9.]/g, '')) || 0 : '',
       currency,
       status: 'pending',
@@ -255,7 +279,7 @@ export default function App() {
   // ═══════════════════════════════════════════════════════════════
   const handleAddRating = async (ratingData) => await addReview(ratingData);
   const handleDeleteRating = async (id) => {
-    if (window.confirm('Delete this webpage review from sunnyportfilo Firestore?')) {
+    if (window.confirm('Delete this webpage review from Firestore?')) {
       await deleteReview(id);
     }
   };
@@ -316,6 +340,7 @@ export default function App() {
   };
 
   const pendingTodosCount = todos.filter((t) => !t.completed).length;
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
@@ -328,6 +353,8 @@ export default function App() {
         todosPendingCount={pendingTodosCount}
         reviewsCount={reviews.length}
         inquiriesCount={inquiries.length}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
 
       {/* ── Main Area ── */}
@@ -343,10 +370,11 @@ export default function App() {
           onOpenNewTodo={() => setActiveTab('todos')}
           onOpenNewRating={() => setIsRatingModalOpen(true)}
           isConnected={true}
+          onMenuOpen={() => setSidebarOpen(true)}
         />
 
         {/* ── Scrollable Content ── */}
-        <main className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+        <main className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-4 md:py-6 space-y-6">
 
           {/* ── DASHBOARD OVERVIEW ── */}
           {activeTab === 'dashboard' && (
@@ -690,7 +718,7 @@ export default function App() {
             />
           )}
 
-          {/* ── WEBPAGE INQUIRIES ── */}
+          {/* ── VIDEO & FILM INQUIRIES ── */}
           {activeTab === 'inquiries' && (
             <InquiriesSection
               inquiries={inquiries}

@@ -34,7 +34,7 @@ export default function RatingsSection({
 
   const filteredReviews = reviews.filter((r) => {
     const name = r.name || r.clientName || '';
-    const text = r.text || r.reviewText || '';
+    const text = r.feedback || r.text || r.reviewText || '';
     const category = r.category || '';
     const role = r.role || '';
 
@@ -79,7 +79,7 @@ export default function RatingsSection({
             ))}
           </div>
           <div className="text-xs text-slate-400 mt-2 font-medium">
-            Based on {totalCount} verified review{totalCount === 1 ? '' : 's'} in <code className="text-blue-400 font-mono">reviews</code>
+            Based on {totalCount} verified review{totalCount === 1 ? '' : 's'} in <code className="text-amber-400 font-mono">ratings</code>
           </div>
         </div>
 
@@ -122,7 +122,7 @@ export default function RatingsSection({
               Reviews submitted by clients on your portfolio webpage sync directly here in real-time.
             </p>
             <div className="mt-2 text-[11px] text-slate-400">
-              Source: <span className="text-slate-300 font-mono">sunnyportfilo.firebaseapp.com</span>
+              Source: <span className="text-slate-300 font-mono">portfilo-3e0b6.firebaseapp.com</span>
             </div>
           </div>
 
@@ -177,9 +177,12 @@ export default function RatingsSection({
           filteredReviews.map((r) => {
             const numScore = Number(r.rating) || 5;
             const name = r.name || r.clientName || 'Verified Client';
-            const text = r.text || r.reviewText || '';
+            const text = r.feedback || r.text || r.reviewText || '';
             const role = r.role || 'Verified Client';
-            const category = r.category || 'editor';
+            const category = r.category || 'Video Editing';
+            const displayDate = r.createdAt?.seconds
+              ? new Date(r.createdAt.seconds * 1000).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
+              : r.date || 'Recent';
 
             return (
               <div
@@ -232,7 +235,7 @@ export default function RatingsSection({
                   <div className="flex items-center gap-2">
                     <Calendar className="w-3.5 h-3.5 text-slate-400" />
                     <span className="text-[11px] text-slate-400">
-                      {r.date || 'Recent'}
+                      {displayDate}
                     </span>
                   </div>
 

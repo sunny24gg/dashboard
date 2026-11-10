@@ -50,7 +50,7 @@ export default function AddRatingModal({
             <div>
               <h3 className="font-bold text-white text-base">Add Client Webpage Review</h3>
               <p className="text-xs text-slate-400">
-                Saves directly to Firebase <code className="text-blue-400 font-mono">reviews</code>
+                Saves directly to Firebase <code className="text-amber-400 font-mono">ratings</code>
               </p>
             </div>
           </div>
